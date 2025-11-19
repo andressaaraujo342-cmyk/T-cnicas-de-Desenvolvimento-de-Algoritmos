@@ -1,0 +1,85 @@
+import matplotlib.pyplot as plt
+
+def cadastrar_produto():
+    nome = input("Digite o nome do produto: ")
+    categoria = input("Digite o nome da categoria do produto: ")
+    valor = float(input("Digite qual o valor do produto: "))
+    quantidade = int(input("Digite qual a quantidade inicial do produto: "))
+    produto = {"Nome": nome, "Categoria": categoria, "Valor": valor, "Quantidade": quantidade}
+    return produto
+
+
+lista_produtos = []
+
+while True:
+    print("SEJA BEM-VINDO AO CADASTRO DE PRODUTOS AUTOMOTIVOS")
+    print("1 - Cadastrar Produto")
+    print("2 - Exibir Produtos")
+    print("3 - Excluir Produtos")
+    print("4 - Alterar Produtos")
+    print("5 - Exibir Gráfico do Estoque")
+    print("6 - Sair do Programa")
+    opcao = int(input("Digite a opção desejada: "))
+
+    if opcao == 1:
+        resp_produto = cadastrar_produto()
+        lista_produtos.append(resp_produto)
+        print("PRODUTO CADASTRADO COM SUCESSO!")
+
+    elif opcao == 2:
+        if not lista_produtos:
+            print("Não há cliente cadastrado para ser exibido!")
+        else:
+            for i in lista_produtos:
+                print(i)
+                if i.get("Quantidade", 0) < 5:
+                    print("ALERTA! ESTOQUE BAIXO!")
+
+    elif opcao == 3:
+        if not lista_produtos:
+            print("Não há produtos cadastrados")
+        else:
+            print("Produtos que podem ser apagados:")
+            for i, produto in enumerate(lista_produtos):
+                print(i, produto)
+            ind = int(input("Qual o produto você deseja excluir? Digite o número: "))
+            if 0 <= ind < len(lista_produtos):
+                del(lista_produtos[ind])
+                print("PRODUTO EXCLUÍDO COM SUCESSO!")
+            else:
+                print("Opção inválida")
+
+    elif opcao == 4:
+        if not lista_produtos:
+            print("Não há produtos cadastrados")
+        else:
+            print("Produtos que podem ser alterados:")
+            for i, produto in enumerate(lista_produtos):
+                print(i, produto)
+            ind = int(input("Qual o produto você deseja alterar? Digite o número: "))
+            if 0 <= ind < len(lista_produtos):
+                chamar_cadastro = cadastrar_produto()
+                lista_produtos[ind] = chamar_cadastro
+                print("PRODUTO ALTERADO COM SUCESSO!")
+            else:
+                print("Opção inválida")
+
+    elif opcao == 5:
+        if not lista_produtos:
+            print("Não há produtos cadastrados para apresentar gráfico.")
+        else:
+            nomes = [p["Nome"] for p in lista_produtos]
+            quantidades = [p["Quantidade"] for p in lista_produtos]
+
+            plt.bar(nomes, quantidades)
+            plt.title("Estoque dos Produtos")
+            plt.xlabel("Produtos")
+            plt.ylabel("Quantidade")
+            plt.show()
+
+    elif opcao == 6:
+        print("O programa foi encerrado!")
+        break
+
+    else:
+        print("Opção Inválida")
